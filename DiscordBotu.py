@@ -1,6 +1,7 @@
 import os
 import discord
 import time
+import requests
 from bilgi import *
 from ayarlar import *
 from discord.ext import commands
@@ -80,9 +81,28 @@ async def ayrisma(ctx):
     await ctx.send("Plastik doğada tam 450 yılda çözünür!\nBebek bezlerinin doğada ayrışması için ise tam 550 yıl gerekir")
 
 @bot.command()
+async def meem(ctx):
+    files = os.listdir("memler")
+    picture1 = random.choice(files)
+    with open(f'memler/{picture1}', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(file = picture)
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+
+@bot.command()
+async def duck(ctx):
+    image_url = get_duck_image_url()
+    await ctx.send(image_url)
+
+
+@bot.command()
 async def help(ctx):
-    await ctx.send("Myth Bot Komutları:\n- !merhaba\n- !bye\n- !şifre\n- !coin\n- !ranmoji \n- !add\n\nYetkili komutları:\n- !shutdown\n- !ping")
-
-
+    await ctx.send("Myth Bot Komutları:\n- !merhaba\n- !bye\n- !şifre\n- !coin\n- !ranmoji \n- !add\n- !meem\n- !duck\n- !ayrisma\n- !market_tavsiyesi\n\nYetkili komutları:\n- !shutdown\n- !ping")
 
 bot.run(token)
